@@ -17,7 +17,10 @@ class QuotationAttribution:
 		base_model=re.sub(".model", "", base_model)
 
 		self.model = BERTSpeakerID(base_model=base_model)
-		self.model.load_state_dict(torch.load(modelFile, map_location=device))
+
+		state_dict = torch.load(modelFile, map_location="cpu", weights_only=True)
+		self.model.load_state_dict(state_dict, strict=False)
+
 		self.model.to(device)
 		self.model.eval()
 
